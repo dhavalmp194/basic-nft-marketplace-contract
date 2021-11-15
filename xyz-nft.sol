@@ -1572,8 +1572,6 @@ contract XYZNftToken is ERC721Enumerable, Ownable{
     
     string public baseURI;
 
-    uint256 public constant TOTAL_SUPPLY = 11111;
-    
     uint256 public constant NFT_MINT_PRICE = 0.09 ether;
     
     uint256 public constant MAX_BULK_TOKEN = 20;
@@ -1597,16 +1595,12 @@ contract XYZNftToken is ERC721Enumerable, Ownable{
         require(saleActivated, "bulkMint: Mint process is pause");
         
         require(_noOfTokensToMint > 0, "bulkMint: amount cannot be 0");
-        require(totalSupply() < TOTAL_SUPPLY, "bulkMint: sale has already ended");
-        require(totalSupply().add(_noOfTokensToMint) <= TOTAL_SUPPLY, "bulkMint: sale has already ended");
         require(_noOfTokensToMint <= MAX_BULK_TOKEN, "bulkMint: You may not buy more than MAX_BULK_TOKEN NFTs at once");
         require(_amount == _noOfTokensToMint.mul(NFT_MINT_PRICE), "bulkMint: Ether value sent is not correct");
         token.transferFrom(_msgSender(), address(this), _amount);
         for (uint256 i = 0; i < _amount; i++) {
             uint idx = totalSupply();
-            if(totalSupply() < TOTAL_SUPPLY){
-                _safeMint(_msgSender(), idx);
-            }
+            _safeMint(_msgSender(), idx);
         }
     }
     
