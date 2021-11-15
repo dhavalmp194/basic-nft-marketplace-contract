@@ -1578,9 +1578,10 @@ contract XYZNftToken is ERC721Enumerable, Ownable{
     
     bool public saleActivated;
 
-    constructor()
+    constructor(IERC20 _token)
         ERC721("XYZ", "XYZ")
     {
+        token = _token;
     }
     
     function setSaleActivatedPauseOrUnpause(bool _value) public onlyOwner{
