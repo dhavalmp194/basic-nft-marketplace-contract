@@ -512,7 +512,7 @@ contract XYZ is ERC20, Ownable{
         _mint(msg.sender, 100000000 * 10**18);
     }
     
-    function burnToken(uint amount) public {
+    function burnToken(uint amount) public onlyOwner{
         _burn(msg.sender, amount);
     }
 } 
