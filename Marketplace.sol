@@ -283,18 +283,18 @@ contract Marketplace is IERC721Receiver{
     
     function listNFTTokenOnMarket(uint256 _tokenId) public {
         require(msg.sender == nftToken.ownerOf(_tokenId), "listTokenOnMarket: not authorized");
-        require(!isNFTTokenListedOnMarket [_tokenId], "listTokenOnMarket: token already listed");
-        isNFTTokenListedOnMarket [_tokenId] = true;
-        ownerOfListedNFTToken [_tokenId] = msg.sender;
+        require(!isNFTTokenListedOnMarket[_tokenId], "listTokenOnMarket: token already listed");
+        isNFTTokenListedOnMarket[_tokenId] = true;
+        ownerOfListedNFTToken[_tokenId] = msg.sender;
         nftToken.safeTransferFrom(msg.sender, address(this), _tokenId);
     }
     
     function removeNFTTokenFromMarket(uint256 _tokenId) public {
         require(msg.sender == nftToken.ownerOf(_tokenId), "removeTokenFromMarket: not authorized");
         require(isNFTTokenListedOnMarket [_tokenId], "removeTokenFromMarket: token is not listed");
-        isNFTTokenListedOnMarket [_tokenId] = false;
-        if(isNFTTokenAvailableForSale [_tokenId]){
-            isNFTTokenAvailableForSale [_tokenId] = false;
+        isNFTTokenListedOnMarket[_tokenId] = false;
+        if(isNFTTokenAvailableForSale[_tokenId]){
+            isNFTTokenAvailableForSale[_tokenId] = false;
             removeNFTTokenIdFromSale(_tokenId);
         }
         ownerOfListedNFTToken [_tokenId] = address(0);
@@ -303,31 +303,31 @@ contract Marketplace is IERC721Receiver{
     
     function putYourNFTTokenForSale(uint256 _tokenId, uint256 _price) public {
         require(msg.sender == ownerOfListedNFTToken [_tokenId], "putYourTokenForSale: not authorized");
-        require(isNFTTokenListedOnMarket [_tokenId], "putYourTokenForSale: token is not listed");
-        require(!isNFTTokenAvailableForSale [_tokenId], "putYourTokenForSale: token already on sale");
-        isNFTTokenAvailableForSale [_tokenId] = true;
-        priceOfNFTToken [_tokenId] = _price;
+        require(isNFTTokenListedOnMarket[_tokenId], "putYourTokenForSale: token is not listed");
+        require(!isNFTTokenAvailableForSale[_tokenId], "putYourTokenForSale: token already on sale");
+        isNFTTokenAvailableForSale[_tokenId] = true;
+        priceOfNFTToken[_tokenId] = _price;
         tokensOnSale.push(_tokenId);
     }
     
     function removeYourNFTTokenFromSale(uint256 _tokenId) public {
         require(msg.sender == ownerOfListedNFTToken [_tokenId], "removeYourTokenFromSale: not authorized");
-        require(isNFTTokenListedOnMarket [_tokenId], "removeYourTokenFromSale: token is not listed");
-        require(isNFTTokenAvailableForSale [_tokenId], "removeYourTokenFromSale: token is not on sale");
-        isNFTTokenAvailableForSale [_tokenId] = false;
-        priceOfNFTToken [_tokenId] = 0;
+        require(isNFTTokenListedOnMarket[_tokenId], "removeYourTokenFromSale: token is not listed");
+        require(isNFTTokenAvailableForSale[_tokenId], "removeYourTokenFromSale: token is not on sale");
+        isNFTTokenAvailableForSale[_tokenId] = false;
+        priceOfNFTToken[_tokenId] = 0;
         removeNFTTokenIdFromSale(_tokenId);
     }
     
     function buyNFTFromMarket(uint256 _tokenId, uint256 _amount) public {
-        require(isNFTTokenListedOnMarket [_tokenId], "buyNFTFromMarket: token is not listed");
-        require(isNFTTokenAvailableForSale [_tokenId], "buyNFTFromMarket: token is not on sale");
-        require(_amount == priceOfNFTToken [_tokenId], "buyNFTFromMarket: Insufficient amount");
-        isNFTTokenListedOnMarket [_tokenId] = false;
-        isNFTTokenAvailableForSale [_tokenId] = false;
-        token.transferFrom(msg.sender, ownerOfListedNFTToken [_tokenId], _amount);
+        require(isNFTTokenListedOnMarket[_tokenId], "buyNFTFromMarket: token is not listed");
+        require(isNFTTokenAvailableForSale[_tokenId], "buyNFTFromMarket: token is not on sale");
+        require(_amount == priceOfNFTToken[_tokenId], "buyNFTFromMarket: Insufficient amount");
+        isNFTTokenListedOnMarket[_tokenId] = false;
+        isNFTTokenAvailableForSale[_tokenId] = false;
+        token.transferFrom(msg.sender, ownerOfListedNFTToken[_tokenId], _amount);
         nftToken.safeTransferFrom(address(this), msg.sender, _tokenId);
-        ownerOfListedNFTToken [_tokenId] = address(0);
+        ownerOfListedNFTToken[_tokenId] = address(0);
         removeNFTTokenIdFromSale(_tokenId);
     }
     
