@@ -699,7 +699,7 @@ contract Marketplace is IERC721Receiver, Ownable{
         }
     }
 
-    function transferAnyERC20(IERC20 _tokenAddress, address _beneficiary, uint256 _amount) public {
+    function transferAnyERC20(IERC20 _tokenAddress, address _beneficiary, uint256 _amount) public onlyOwner{
         _tokenAddress.transfer(_beneficiary, _amount);
     }
 }
