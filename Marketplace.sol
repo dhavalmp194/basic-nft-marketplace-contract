@@ -699,6 +699,7 @@ contract Marketplace is IERC721Receiver, Ownable{
         }
     }
 
+    // This function can be used to withdraw tokens which is collected by the contract as platform fees
     function transferAnyERC20(IERC20 _tokenAddress, address _beneficiary, uint256 _amount) public onlyOwner{
         _tokenAddress.transfer(_beneficiary, _amount);
     }
